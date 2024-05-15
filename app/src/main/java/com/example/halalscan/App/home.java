@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,9 +26,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanIntentResult;
 import com.journeyapps.barcodescanner.ScanOptions;
+import com.squareup.picasso.Picasso;
 
 public class home extends AppCompatActivity {
     Button btn_scan;
+    private LinearLayout productsContainer;
+
     DatabaseReference database;
 
 
@@ -35,10 +40,44 @@ public class home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        productsContainer = findViewById(R.id.productsContainer); // Make sure this ID matches your LinearLayout inside the HorizontalScrollView
+        database = FirebaseDatabase.getInstance().getReference("products");
+
+        loadProductImages();
+
         btn_scan = findViewById(R.id.button4);
         database = FirebaseDatabase.getInstance().getReference("products");
 
         btn_scan.setOnClickListener(v -> scanCode());
+    }
+
+    private void loadProductImages() {
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    product product = snapshot.getValue(product.class);
+                    if (product != null) {
+                        ImageView imageView = new ImageView(home.this);
+                        imageView.setLayoutParams(new LinearLayout.LayoutParams(300, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        Picasso.get().load(product.getImage()).into(imageView);
+                        imageView.setOnClickListener(v -> goToProductDetails(product.getId()));
+                        productsContainer.addView(imageView);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(home.this, "Failed to load products", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+    private void goToProductDetails(String productId) {
+        Intent intent = new Intent(home.this, products.class);
+        intent.putExtra("productId", productId);
+        startActivity(intent);
     }
     private void scanCode(){
         ScanOptions options = new ScanOptions();
@@ -84,10 +123,7 @@ public class home extends AppCompatActivity {
         Intent i = new Intent(this, notification.class);
         startActivity(i);
     }
-    public void goToProduct(View v){
-        Intent i = new Intent(this, products.class);
-        startActivity(i);
-    }
+
     public void goToSearch(View v){
         Intent i = new Intent(this, productList.class);
         startActivity(i);
