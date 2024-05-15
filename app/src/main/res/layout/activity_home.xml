@@ -129,7 +129,7 @@
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.092"
+                app:layout_constraintHorizontal_bias="0.09"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView15"
                 app:layout_constraintVertical_bias="0.0" />
@@ -161,6 +161,17 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView13"
                 app:layout_constraintVertical_bias="0.345"
                 app:srcCompat="@drawable/scan_case" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="149dp"
+                android:layout_height="134dp"
+                android:backgroundTint="#00000000"
+                android:contentDescription="kljj"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView13"
+                app:layout_constraintEnd_toEndOf="@+id/imageView13"
+                app:layout_constraintStart_toStartOf="@+id/imageView13"
+                app:layout_constraintTop_toTopOf="@+id/imageView13" />
 
             <ImageView
 
