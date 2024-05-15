@@ -109,8 +109,9 @@ public class login extends AppCompatActivity {
 
                         if (passwordFromDB != null && passwordFromDB.equals(password)) {
                             Password.setError(null);
-                            Intent i = new Intent(login.this, home.class);
-                            startActivity(i);
+                            Intent intent = new Intent(login.this, home.class);
+                            startActivity(intent);
+                            finish();
                             return;
                         }
                     }
